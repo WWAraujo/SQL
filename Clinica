@@ -1,0 +1,65 @@
+#Criando um banco
+create database clinica;
+
+#Entrar no banco
+use clinica;
+
+create table ambulatorio(
+nroa int primary key auto_increment,
+andar int not null,
+capacidade int 
+);
+
+#Para mostrar uma tabela
+select * from ambulatorio;
+
+create table medico(
+codm int primary key auto_increment,
+nome varchar(30) not null,
+idade int not null,
+especialidade char(20),
+cpf varchar(11),
+cidade varchar(30),
+fk_nroa int,
+foreign key(fk_nroa) references ambulatorio(nroa)
+);
+
+#Para mostrar uma tabela
+select * from medico; 
+
+create table paciente(
+codp int primary key auto_increment,
+nome varchar(30) not null,
+idade int not null,
+doenca char(40) not null,
+cpf varchar(11),
+cidade varchar(30)
+);
+
+#Para alterar uma coluna já criada 
+alter table paciente change cpf cpf varchar(11) unique;
+
+create table funcionario(
+codf int primary key auto_increment,
+nome varchar(40) not null,
+idade smallint,
+doenca char(20),
+cpf varchar(11) unique,
+cidade varchar(30),
+salario numeric(10,2),
+cargo varchar(20)
+);
+
+#Jogar uma tabela fora
+drop table consulta; 
+
+create table consulta(
+num_consulta int primary key auto_increment,
+fk_codm int,
+fk_codp int, #Usando uma chave estrangeira.
+foreign key(fk_codm) references medico(codm),
+foreign key(fk_codp) references paciente(codp), #Usando uma chave primaria estrangeira.
+data_consulta date,
+hora time
+);
+
