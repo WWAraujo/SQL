@@ -50,6 +50,20 @@ salario numeric(10,2),
 cargo varchar(20)
 );
 
+#Inserindo valores na tabela - Comeca com as variaveis e depois os valores - string sempre dentro das aspas 
+insert into funcionario (nome,idade,cpf,cidade,salario) values("Rita",32,"São Jose",23400033300,1200),
+							("Maria",55,"Palhoca",48734529801,1000),
+							("Caio",34,"São Jose",48509728347,1500),
+							("Carlos",25,"São Paulo",34895434598,1300),
+							("Paulo",43,"São Paulo",34523847591,1100)
+;
+
+#Removendo a coluna de cargos da tabela funcionarios
+alter table funcionario drop column cargo;
+
+#mostrar uma tabela 
+select * from funcionario;
+
 #Jogar uma tabela fora
 drop table consulta; 
 
@@ -63,3 +77,7 @@ data_consulta date,
 hora time
 );
 
+#Esse código adiciona uma nova coluna
+alter table funcionario add column nroa int;
+
+select * from funcionario;
