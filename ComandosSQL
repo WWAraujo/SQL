@@ -114,3 +114,6 @@ delete from paciente where doenca like 'cancer' or idade < 10;
 /*8- Os médicos que residem em Biguacu e Palhoca deixaram a clínica*/
 delete from medico where cidade like 'Biguacu' or cidade like 'Palhoca';
 delete from medico where cidade in('Biguacu','palhoca');
+
+/*Para mostrar apenas uma coluna da tabela com a caixa alta*/
+select upper(nome) from paciente;
