@@ -1,0 +1,115 @@
+/*Link para ajudar nos códigos*/
+https://www.w3schools.com/
+
+/*criar um banco de dados*/ 
+create database Clinica;
+// entrar no banco de dados.
+use Clinica;
+
+/*criar tabela no banco*/
+create table ambulatorios (
+nroa int primary key auto_increment,
+andar int not null, 
+capacidade smallint
+);
+
+/*exibir a tabela criada*/
+select * from ambulatorios;
+
+create table medicos(
+codm int primary key, 
+nome varchar(40) not null,
+idade smallint not null,
+especialidade char(20), 
+cpf varchar(11) unique,
+cidade varchar(30),
+fk_nroa int not null,
+foreign key(fk_nroa) references ambulatorio(nroa)
+);
+
+select * from Medicos;
+
+/*Para excluir uma tabela*/
+use Clinica;
+drop table consulta;
+drop table ambulatorio;
+drop table medico;
+drop table paciente;
+drop table funcionario;
+drop table ambulatorio;
+
+/*Para mostrar a descrição da tabela*/
+describe medico;
+
+//descrevendo uma tabela e iserindo os valores
+desc ambulatorio;
+insert into ambulatorio (andar,capacidade) 
+		     value (1,30),
+             		   (1,50),
+             		   (2,40),
+            		   (2,25),
+          		   (2,5);
+
+describe medico;
+insert into medico (nome,idade,especialidade,cpf,cidade,fk_nroa) 
+	 values ('João',40,'Ortopedia','12345678910','Florianopolis',1),
+            ('Maria',42,'Traumatologia','12345678910','Blumenal',2),
+            ('Pedro',51,'Pediatria','12345348910','São José',2),
+            ('Carlos',28,'Ortopedia','12344578910','Joinville',4),
+            ('Marcia',33,'Neurologia','12367678910','Biguacu',3);            
+            
+desc paciente;
+insert into paciente (nome,idade,cidade,cpf,doenca)
+	value ('Ana',20,'Florianopolis','20000200000','Gripe'),
+            ('Paulo',24,'Palhoca','20000220000','trauma'),
+            ('Lucia',30,'biguacu','22000200000','Tendinite'),
+            ('Carlos',28,'JOinvilhe','11000110000','Sarampo');
+            
+describe consulta;
+
+/*para alterar um dado na tabela precisa.*/ 
+update paciente set cidade = 'Ilhota' where codp =2;
+
+describe consulta;
+select * from medico;
+insert into consulta (fk_codm,fk_codp,data_consulta,hora) 
+		  value (11,1,'2006/06/12','14:00'),
+                (11,4,'2006/06/13','10:00'),
+                (12,1,'2006/06/13','09:00'),
+                (12,2,'2006/06/13','11:00'),
+                (12,3,'2006/06/14','14:00'),
+                (12,4,'2006/06/14','17:00'),
+                (13,1,'2006/06/19','18:00'),
+                (13,3,'2006/06/12','10:00'),
+                (13,4,'2006/06/19','13:00'),
+                (14,4,'2006/06/20','13:00'),
+                (14,4,'2006/06/22','19:30');
+
+select * from consulta;
+select * from paciente;
+select * from funcionario;
+select * from medico;
+
+/*1- O paciente Paulo mudou-se para Ilhota*/
+update paciente set cidade = 'Ilhota' where codp =2;
+
+/*2- A consulta do médico 1 com o paciente 4 passou para às 12:00 horas do dia 4 de Julho de 2006 */
+update consulta set hora = '12:00', data_consulta = '2006/07/04' where num_consulta =57;
+
+/*3- A paciente Ana fez aniversário e sua doença agora é 	hepatite*/
+update paciente set idade = idade + 1, doenca = 'hepatite' where codp =1;
+
+/*4- A consulta do médico Pedro (codm = 3) com o paciente Carlos (codp = 4) passou para uma hora e meia depois*/
+update consulta set hora = addtime(hora,'1:30') where fk_codm =13 and fk_codp =4;
+
+/*5- O funcionário Carlos (codf = 4) deixou a clínica*/
+delete from funcionario where codf = 4;
+
+/*6- As consultas marcadas após as 19 horas foram*/
+delete from consulta where hora >= '19:00';
+
+/*7- Os pacientes com câncer ou idade inferior a 10 anos deixaram a clínica*/
+delete from paciente where doenca like 'cancer' or idade < 10;
+
+/*8- Os médicos que residem em Biguacu e Palhoca deixaram a clínica*/
+delete from medico where cidade like 'Biguacu' or cidade like 'Palhoca';
