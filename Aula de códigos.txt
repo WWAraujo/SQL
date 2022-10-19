@@ -1,0 +1,71 @@
+-- select
+-- from
+-- where
+-- group by
+-- order by
+-- having
+
+
+DROP SCHEMA IF EXISTS agencia;
+use sakila;
+SHOW tables;
+select * from actor;
+select last_name,first_name from actor;
+
+-- para pesquisar todas as pessoas em ordem alfabetica
+select first_name,last_name from actor order by first_name desc;
+
+-- para pesquisar na tabela todas as pessoas que começa com a letra c 
+select first_name,last_name from actor where first_name like 'C%' order by first_name;
+
+-- para pesquisar na tabela todas as pessoas que a 1 letra é C 2 qualquer uma e 3 com R 
+select first_name,last_name from actor where first_name like 'C_R%' order by first_name;
+
+-- Para pesquisar todos os nome que não começa com a letra A
+select first_name,last_name from actor where first_name not like 'A%' order by first_name;
+
+-- Para trocar o nome do titulo da tabela 
+select first_name 'Primeiro Nome',last_name as 'Sobrenome' from actor;
+
+-- Para contar o numero de pessoal que começa com a letra A
+select count(*) from actor where first_name like 'a%';
+
+select * from payment;
+select sum(amount) from payment where customer_id =1;
+
+select * from customer;
+
+-- para buscar o priemiro nome da tabela customer e o valor da payment, 
+-- cuscando pelo id 1 e quando as tabelas tem o mesmo valor do customer id
+select customer.first_name,payment.amount from payment,customer 
+		where payment.customer_id =1 and payment.customer_id = customer.customer_id; 
+
+-- Para apelidar abreviar uma tabela use no FROM select * from payment A, customer B e todos os outros nomes da tabela coloca A e B. 
+
+-- Outra forma de juntar duas tabelas com o mesmo nome da taba de ID
+select customer.first_name,payment.amount from payment inner join customer using(customer_id); 
+
+-- Outra forma de juntar duas tabelas com os nomes diferentes de colunas.
+select customer.first_name, payment.amount from payment inner join customer on payment.customer_id = customer.customer_id;
+
+
+-- Para agrupar o tatal por pessoa 
+select customer.first_name, sum(payment.amount)  
+from payment 
+inner join customer on payment.customer_id = customer.customer_id
+group by customer.first_name;
+
+-- gerar um relatorio do pagamento com uma faixa de data 
+select customer.first_name, sum(payment.amount)  
+from payment 
+inner join customer on payment.customer_id = customer.customer_id
+where payment.payment_date >='2005-07-01' and payment.payment_date <='2005-08-01'
+group by customer.first_name;
+
+-- gerar um relatorio do pagamento com uma faixa de data 
+select customer.first_name, sum(payment.amount)  
+from payment 
+inner join customer on payment.customer_id = customer.customer_id
+where payment.payment_date between '2005-07-01' and '2005-08-01'
+group by customer.first_name;
+
