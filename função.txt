@@ -1,0 +1,40 @@
+use sakila;
+show full tables;
+show function status;
+
+select * from customer;
+select * from address;
+
+-- Criar um metodo de chamar o nome e endereço de uma pessoas 
+-- fazendo a junção de duas tabelas
+select customer.first_name,address.address from customer 
+		 inner join address using(address_id) 
+         where customer_id = 1;
+
+
+-- Criando uma função (objeto)
+delimiter $$
+create function endereco_completo (codigo int) 
+returns varchar (100) 
+deterministic 
+begin 
+	declare endereco_completo varchar(100);
+	select concat(customer.first_name,', ',address.address) 
+    into endereco_completo from customer 
+	inner join address using(address_id) 
+	where customer_id = codigo;
+return endereco_completo;
+end
+$$
+
+-- Verificar as funcões no banco 
+show function status;
+
+-- Chamar a função passando um parametro
+select endereco_completo (1); 
+
+-- Chamando a função com todos o itens
+select endereco_completo (customer_id) from customer; 
+
+
+
