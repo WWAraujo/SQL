@@ -1,0 +1,88 @@
+use sakila;
+select * from customer;
+select * from address;
+
+select customer.first_name,address.address from customer 
+inner join address using(address_id) where customer_id = 1;
+
+select customer.first_name,address.address,address.district from customer 
+inner join address using(address_id) where customer_id = 1;
+
+select customer.first_name,address.address,address.district from customer 
+inner join address using(address_id) 
+where address.district like 'A%';
+-- Quando coloca % dentro das aspas é para pesquisar tudo que começa com o que estiver a direito nesse exemplo a letra A
+
+__________________________________________________________________________________________
+
+-- Criando uma procedure "função" no Banco de dados.  
+
+delimiter $$
+create procedure lista_endereco(valor varchar(20))
+begin 
+select customer.first_name,address.address,address.district from customer 
+	inner join address using(address_id) 
+	where address.district like valor;
+end
+$$
+
+drop procedure lista_endereco;
+-- Mostrar os procedure criadas no banco
+show procedure status;
+
+-- Mostrar todas as functions
+show functions;
+
+-- Para chamar a procedure criada
+call lista_endereco('A%');
+
+_____________________________________________________________________________________________
+
+-- Criando uma tabela de venda
+create table venda(
+codigo_venda int primary key auto_increment,
+codigo_prod int, 
+quantidade_venda int
+);
+
+-- Criando uma tabela de produto
+create table produto(
+	codigo_prod int primary key auto_increment,
+    descricao varchar(20),
+    quantidade int,
+    valor decimal(9,2)
+);
+
+insert into produto (descricao,quantidade,valor)
+			values ('lapis',30,2.5);
+            
+select * from produto;
+
+delimiter $$
+create trigger atualiza_estoque after insert on venda for each row
+begin
+if new.quantidade_venda > 0 then 
+	update produto set quantidade = quantidade - new.quantidade_venda
+		where codigo_prod = new.codigo_prod;
+end if;
+end
+$$
+
+insert into venda (codigo_prod,quantidade_venda)
+			values (1,5);
+
+            
+delimiter $$
+create trigger estorno_estoque before delete on venda for each row
+begin
+if old.quantidade_venda > 0 then 
+	update produto set quantidade = quantidade + old.quantidade_venda
+		where codigo_prod = old.codigo_prod;
+end if;
+end
+$$
+
+drop trigger estorno_estoque;
+select * from venda;
+select * from produto;
+delete from venda where codigo_venda = 3;
